@@ -43,8 +43,13 @@ tags:
 
 CommonJS 本质上只是一套规范（API 定义），而 Node.js 采用并实现了部分规范，CommonJS Module 的写法也因此广泛流行。
 
-
 让我们看看 Node 中的实现：
+```css
+//
+.css{
+    background-color:#fff;
+}
+```
 
 ```js
 // 由于 Node 原生支持模块的作用域，并不需要额外的 wrapper
