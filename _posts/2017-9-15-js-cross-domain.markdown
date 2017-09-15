@@ -13,7 +13,7 @@ tags:
 基本每一个前端develper对于跨域都不会陌生，在自我学习和实际项目应用中踩过这个坑的想必不会少。前端跨域的解决方案根据应用场景的区别也会有多种形式，对于这些，以 **blog** 的方式记录并总结，留待他日使用。
 
 # 正文
- ####  1. 跨域的定义？
+####  1. 跨域的定义？
 
 跨域一词从字面意思看，就是跨域名嘛，但实际上跨域的范围绝对不止那么狭隘。具体概念如下：只要协议、域名、端口有任何一个不同，都被当作是不同的域。之所以会产生跨域这个问题呢，其实也很容易想明白，要是随便引用外部文件，不同标签下的页面引用类似的彼此的文件，浏览器很容易懵逼的，安全也得不到保障了就。什么事，都是安全第一嘛。但在安全限制的同时也给注入iframe或是ajax应用上带来了不少麻烦。所以我们要通过一些方法使本域的js能够操作其他域的页面对象或者使其他域的js能操作本域的页面对象（iframe之间）。下面是具体的跨域情况详解：
 
@@ -46,6 +46,7 @@ http://www.a.com/b.js         不同域名               
 ####  2.  通过document.domain跨域
 
 前面说过了，浏览器有一个同源策略，其限制之一是不能通过ajax的方法去请求不同源中的文档。 第二个限制是浏览器中不同域的框架之间是不能进行js的交互操作的。不同的框架之间是可以获取window对象的，但却无法获取相应的属性和方法。比如，有一个页面，它的地址是http://www.damonare.cn/a.html ， 在这个页面里面有一个iframe，它的src是http://damonare.cn/b.html, 很显然，这个页面与它里面的iframe框架是不同域的，所以我们是无法通过在页面中书写js代码来获取iframe中的东西的：
+
 ``` html
 <script type="text/javascript">
     function test(){
@@ -79,7 +80,7 @@ http://www.a.com/b.js         不同域名               
 ```
 修改document.domain的方法只适用于不同子域的框架间的交互。
 
- ####  3. 通过location.hash跨域
+####  3. 通过location.hash跨域
 
 因为父窗口可以对iframe进行URL读写，iframe也可以读写父窗口的URL，URL有一部分被称为hash，就是#号及其后面的字符，它一般用于浏览器锚点定位，Server端并不关心这部分，应该说HTTP请求过程中不会携带hash，所以这部分的修改不会产生HTTP请求，但是会产生浏览器历史记录。此方法的原理就是改变URL的hash部分来进行双向通信。每个window通过改变其他 window的location来发送消息（由于两个页面不在同一个域下IE、Chrome不允许修改parent.location.hash的值，所以要借助于父窗口域名下的一个代理iframe），并通过监听自己的URL的变化来接收消息。这个方式的通信会造成一些不必要的浏览器历史记录，而且有些浏览器不支持onhashchange事件，需要轮询来获知URL的改变，最后，这样做也存在缺点，诸如数据直接暴露在了url中，数据容量和类型都有限等。下面举例说明：
 
@@ -94,7 +95,8 @@ http://www.a.com/b.js         不同域名               
  * a.html监听到url发生变化，触发相应操作
 
 b.html页面的关键代码如下:
-``` html
+
+``` js
  try {  
     parent.location.hash = 'data';  
 } catch (e) {  
@@ -109,12 +111,12 @@ b.html页面的关键代码如下:
 proxy.html页面的关键代码如下 :
 
 
-``` html
+``` js
  //因为parent.parent（即baidu.com/a.html）和baidu.com/proxy.html属于同一个域，所以可以改变其location.hash的值  
 parent.parent.location.hash = self.location.hash.substring(1);
 ```
 
- ####  4. 通过HTML5的postMessage方法跨域
+####  4. 通过HTML5的postMessage方法跨域
 
 高级浏览器Internet Explorer 8+, chrome，Firefox , Opera 和 Safari 都将支持这个功能。这个功能主要包括接受信息的”message”事件和发送消息的”postMessage”方法。比如damonare.cn域的A页面通过iframe嵌入了一个google.com域的B页面，可以通过以下方法实现A和B的通信
 
@@ -195,7 +197,7 @@ jquery会自动生成一个全局函数来替换callback=?中的问号，之后�
   - JSONP的优点是：它不像XMLHttpRequest对象实现的Ajax请求那样受到同源策略的限制；它的兼容性更好，在更加古老的浏览器中都可以运行，不需要XMLHttpRequest或ActiveX的支持；并且在请求完毕后可以通过调用callback的方式回传结果。
   - JSONP的缺点则是：它只支持GET请求而不支持POST等其它类型的HTTP请求；它只支持跨域HTTP请求这种情况，不能解决不同域的两个页面之间如何进行JavaScript调用的问题。
 
- ####  6. 通过CORS跨域
+####  6. 通过CORS跨域
 
 CORS（Cross-Origin Resource Sharing）跨域资源共享，定义了必须在访问跨域资源时，浏览器与服务器应该如何沟通。CORS背后的基本思想就是使用自定义的HTTP头部让浏览器与服务器进行沟通，从而决定请求或响应是应该成功还是失败。目前，所有浏览器都支持该功能，IE浏览器不能低于IE10。整个CORS通信过程，都是浏览器自动完成，不需要用户参与。对于开发者来说，CORS通信与同源的AJAX通信没有差别，代码完全一样。浏览器一旦发现AJAX请求跨源，就会自动添加一些附加的头信息，有时还会多出一次附加的请求，但用户不会有感觉。
 
@@ -228,7 +230,7 @@ CORS（Cross-Origin Resource Sharing）跨域资源共享，定义了必须在�
 
 CORS与JSONP相比，无疑更为先进、方便和可靠。
 
- ####  7. 通过window.name跨域
+####  7. 通过window.name跨域
 
 window对象有个name属性，该属性有个特征：即在一个窗口(window)的生命周期内,窗口载入的所有的页面都是共享一个window.name的，每个页面对window.name都有读写的权限，window.name是持久存在一个窗口载入过的所有页面中的，并不会因新页面的载入而进行重置。
 
