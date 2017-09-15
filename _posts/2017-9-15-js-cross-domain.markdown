@@ -13,7 +13,7 @@ tags:
 基本每一个前端develper对于跨域都不会陌生，在自我学习和实际项目应用中踩过这个坑的想必不会少。前端跨域的解决方案根据应用场景的区别也会有多种形式，对于这些，以 **blog** 的方式记录并总结，留待他日使用。
 
 # 正文
-1. #### 跨域的定义？
+ ####  1. 跨域的定义？
 
 跨域一词从字面意思看，就是跨域名嘛，但实际上跨域的范围绝对不止那么狭隘。具体概念如下：只要协议、域名、端口有任何一个不同，都被当作是不同的域。之所以会产生跨域这个问题呢，其实也很容易想明白，要是随便引用外部文件，不同标签下的页面引用类似的彼此的文件，浏览器很容易懵逼的，安全也得不到保障了就。什么事，都是安全第一嘛。但在安全限制的同时也给注入iframe或是ajax应用上带来了不少麻烦。所以我们要通过一些方法使本域的js能够操作其他域的页面对象或者使其他域的js能操作本域的页面对象（iframe之间）。下面是具体的跨域情况详解：
 
@@ -43,10 +43,10 @@ http://www.a.com/b.js         不同域名               
  - 在跨域问题上，域仅仅是通过“URL的首部”来识别而不会去尝试判断相同的ip地址对应着两个域或两个域是否在同一个ip上。
 (“URL的首部”指window.location.protocol +window.location.host，也可以理解为“Domains, protocols and ports must match”。)
 
-2. #### 通过document.domain跨域
+####  2.  通过document.domain跨域
 
 前面说过了，浏览器有一个同源策略，其限制之一是不能通过ajax的方法去请求不同源中的文档。 第二个限制是浏览器中不同域的框架之间是不能进行js的交互操作的。不同的框架之间是可以获取window对象的，但却无法获取相应的属性和方法。比如，有一个页面，它的地址是http://www.damonare.cn/a.html ， 在这个页面里面有一个iframe，它的src是http://damonare.cn/b.html, 很显然，这个页面与它里面的iframe框架是不同域的，所以我们是无法通过在页面中书写js代码来获取iframe中的东西的：
-``` js
+``` html
 <script type="text/javascript">
     function test(){
         var iframe = document.getElementById('￼ifame');
@@ -62,7 +62,7 @@ http://www.a.com/b.js         不同域名               
 
 - 在页面http://www.damonare.cn/a.html 中设置
 - document.domain:
-``` js
+``` html
 <iframe id = "iframe" src="http://damonare.cn/b.html" onload = "test()"></iframe>
 <script type="text/javascript">
     document.domain = 'damonare.cn';//设置成主域
@@ -72,14 +72,14 @@ http://www.a.com/b.js         不同域名               
 </script>
 ```
 在页面http://damonare.cn/b.html 中也设置document.domain:
-``` js
+``` html
 <script type="text/javascript">
     document.domain = 'damonare.cn';//在iframe载入这个页面也设置document.domain，使之与主页面的document.domain相同
 </script>
 ```
 修改document.domain的方法只适用于不同子域的框架间的交互。
 
-3. #### 通过location.hash跨域
+ ####  3. 通过location.hash跨域
 
 因为父窗口可以对iframe进行URL读写，iframe也可以读写父窗口的URL，URL有一部分被称为hash，就是#号及其后面的字符，它一般用于浏览器锚点定位，Server端并不关心这部分，应该说HTTP请求过程中不会携带hash，所以这部分的修改不会产生HTTP请求，但是会产生浏览器历史记录。此方法的原理就是改变URL的hash部分来进行双向通信。每个window通过改变其他 window的location来发送消息（由于两个页面不在同一个域下IE、Chrome不允许修改parent.location.hash的值，所以要借助于父窗口域名下的一个代理iframe），并通过监听自己的URL的变化来接收消息。这个方式的通信会造成一些不必要的浏览器历史记录，而且有些浏览器不支持onhashchange事件，需要轮询来获知URL的改变，最后，这样做也存在缺点，诸如数据直接暴露在了url中，数据容量和类型都有限等。下面举例说明：
 
@@ -94,7 +94,8 @@ http://www.a.com/b.js         不同域名               
  * a.html监听到url发生变化，触发相应操作
 
 b.html页面的关键代码如下:
-> try {  
+``` html
+ try {  
     parent.location.hash = 'data';  
 } catch (e) {  
     // ie、chrome的安全机制无法修改parent.location.hash，  
@@ -103,32 +104,39 @@ b.html页面的关键代码如下:
     ifrproxy.src = "http://www.baidu.com/proxy.html#data";  
     document.body.appendChild(ifrproxy);  
 }
+```
 
 proxy.html页面的关键代码如下 :
 
-> //因为parent.parent（即baidu.com/a.html）和baidu.com/proxy.html属于同一个域，所以可以改变其location.hash的值  
-parent.parent.location.hash = self.location.hash.substring(1);
 
-4. #### 通过HTML5的postMessage方法跨域
+``` html
+ //因为parent.parent（即baidu.com/a.html）和baidu.com/proxy.html属于同一个域，所以可以改变其location.hash的值  
+parent.parent.location.hash = self.location.hash.substring(1);
+```
+
+ ####  4. 通过HTML5的postMessage方法跨域
 
 高级浏览器Internet Explorer 8+, chrome，Firefox , Opera 和 Safari 都将支持这个功能。这个功能主要包括接受信息的”message”事件和发送消息的”postMessage”方法。比如damonare.cn域的A页面通过iframe嵌入了一个google.com域的B页面，可以通过以下方法实现A和B的通信
 
 A页面通过postMessage方法发送消息：
-> window.onload = function() {  
+``` js
+ window.onload = function() {  
     var ifr = document.getElementById('ifr');  
     var targetOrigin = "http://www.google.com";  
     ifr.contentWindow.postMessage('hello world!', targetOrigin);  
 };
+```
 
 postMessage的使用方法：
-
-> otherWindow.postMessage(message, targetOrigin);
+``` js
+ otherWindow.postMessage(message, targetOrigin);
 otherWindow:指目标窗口，也就是给哪个window发消息，是 window.frames 属性的成员或者由 window.open 方法创建的窗口
 message: 是要发送的消息，类型为 String、Object (IE8、9 不支持)
 targetOrigin: 是限定消息接收范围，不限制请使用 ‘*
-
+```
 B页面通过message事件监听并接受消息:
-> var onmessage = function (event) {  
+``` js
+ var onmessage = function (event) {  
   var data = event.data;//消息  
   var origin = event.origin;//消息来源地址  
   var source = event.source;//源Window对象  
@@ -142,15 +150,15 @@ if (typeof window.addEventListener != 'undefined') {  
   //for ie  
   window.attachEvent('onmessage', onmessage);  
 }  
-
+```
 同理，也可以B页面发送消息，然后A页面监听并接受消息。
 
-5.  #### 通过jsonp跨域
+#### 5. 通过jsonp跨域
 
 刚才说的这几种都是双向通信的，即两个iframe，页面与iframe或是页面与页面之间的，下面说几种单项跨域的（一般用来获取数据），因为通过script标签引入的js是不受同源策略的限制的。所以我们可以通过script标签引入一个js或者是一个其他后缀形式（如php，jsp等）的文件，此文件返回一个js函数的调用。
 比如，有个a.html页面，它里面的代码需要利用ajax获取一个不同域上的json数据，假设这个json数据地址是
 [http://damonare.cn/data.php](),那么a.html中的代码就可以这样：
-``` js
+``` html
 <script type="text/javascript">
     function dosomething(jsondata){
         //处理获得的json数据
@@ -173,7 +181,7 @@ echo $callback.'('.json_encode($data).')';//输出
 最终，输出结果为：dosomething([‘a’,’b’,’c’]);
 
 如果你的页面使用jquery，那么通过它封装的方法就能很方便的来进行jsonp操作了。
-``` js
+``` html
 <script type="text/javascript">
     $.getJSON('http://example.com/data.php?callback=?,function(jsondata)'){
         //处理获得的json数据
@@ -187,13 +195,13 @@ jquery会自动生成一个全局函数来替换callback=?中的问号，之后�
   - JSONP的优点是：它不像XMLHttpRequest对象实现的Ajax请求那样受到同源策略的限制；它的兼容性更好，在更加古老的浏览器中都可以运行，不需要XMLHttpRequest或ActiveX的支持；并且在请求完毕后可以通过调用callback的方式回传结果。
   - JSONP的缺点则是：它只支持GET请求而不支持POST等其它类型的HTTP请求；它只支持跨域HTTP请求这种情况，不能解决不同域的两个页面之间如何进行JavaScript调用的问题。
 
-6. #### 通过CORS跨域
+ ####  6. 通过CORS跨域
 
 CORS（Cross-Origin Resource Sharing）跨域资源共享，定义了必须在访问跨域资源时，浏览器与服务器应该如何沟通。CORS背后的基本思想就是使用自定义的HTTP头部让浏览器与服务器进行沟通，从而决定请求或响应是应该成功还是失败。目前，所有浏览器都支持该功能，IE浏览器不能低于IE10。整个CORS通信过程，都是浏览器自动完成，不需要用户参与。对于开发者来说，CORS通信与同源的AJAX通信没有差别，代码完全一样。浏览器一旦发现AJAX请求跨源，就会自动添加一些附加的头信息，有时还会多出一次附加的请求，但用户不会有感觉。
 
 因此，实现CORS通信的关键是服务器。只要服务器实现了CORS接口，就可以跨源通信。
 平时的ajax请求可能是这样的:
-``` js
+``` html
 <script type="text/javascript">
     var xhr = new XMLHttpRequest();
     xhr.open("POST", "/damonare",true);
@@ -202,7 +210,7 @@ CORS（Cross-Origin Resource Sharing）跨域资源共享，定义了必须在�
 ```
 
 以上damonare部分是相对路径，如果我们要使用CORS，相关Ajax代码可能如下所示：
-``` js
+``` html
 <script type="text/javascript">
     var xhr = new XMLHttpRequest();
     xhr.open("￼GET", "http://segmentfault.com/u/trigkit4/",true);
@@ -220,16 +228,17 @@ CORS（Cross-Origin Resource Sharing）跨域资源共享，定义了必须在�
 
 CORS与JSONP相比，无疑更为先进、方便和可靠。
 
-7. #### 通过window.name跨域
+ ####  7. 通过window.name跨域
 
 window对象有个name属性，该属性有个特征：即在一个窗口(window)的生命周期内,窗口载入的所有的页面都是共享一个window.name的，每个页面对window.name都有读写的权限，window.name是持久存在一个窗口载入过的所有页面中的，并不会因新页面的载入而进行重置。
 
 比如：我们在任意一个页面输入
-> window.name = "My window's name";
+``` js
+ window.name = "My window's name";
 setTimeout(function(){
     window.location.href = "http://damonare.cn/";
 },1000)
-
+```
 进入damonare.cn页面后我们再检测再检测 window.name :
 
 > window.name; // My window's name
@@ -249,16 +258,18 @@ setTimeout(function(){
 在 iframe.html 中设置好了 window.name 为我们要传递的字符串。
 我们在 index.html 中写了下面的代码：
 
-> var iframe = document.getElementById('iframe');
+``` js
+ var iframe = document.getElementById('iframe');
 var data = '';
  
 iframe.onload = function() {
     data = iframe.contentWindow.name;
 };
-
+```
 Boom!报错！肯定的，因为两个页面不同源嘛，想要解决这个问题可以这样干：
 
-> var iframe = document.getElementById('iframe');
+``` js
+ var iframe = document.getElementById('iframe');
 var data = '';
  
 iframe.onload = function() {
@@ -267,7 +278,7 @@ iframe.onload = function() {
     }
     iframe.src = 'about:blank';
 };
-
+```
 **或者将里面的 about:blank 替换成某个同源页面（about:blank，javascript: 和 data: 中的内容，继承了载入他们的页面的源。）**
 
 这种方法与 document.domain 方法相比，放宽了域名后缀要相同的限制，可以从任意页面获取 string 类型的数据。
