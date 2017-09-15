@@ -6,7 +6,7 @@ date:       2017-09-15
 author:     "arron"
 header-img: "img/post-bg-js-version.jpg"
 tags:
-    - javaScript
+    - JavaScript
 ---
 # 前言
 
