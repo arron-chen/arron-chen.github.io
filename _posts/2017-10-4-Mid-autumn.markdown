@@ -1,3 +1,14 @@
+---
+layout:     post
+title:      "hello ,Mid-autumn"
+subtitle:   "hi, moon"
+date:       2017-10-4
+author:     "arron"
+header-img: "img/post-bg-unix-linux.jpg"
+tags:
+    - life
+    
+---
 # hello ,Mid-autumn
 >还好吗，中秋我的朋友
 ## 不一样的中秋
