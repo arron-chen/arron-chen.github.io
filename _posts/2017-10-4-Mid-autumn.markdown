@@ -23,3 +23,4 @@ tags:
 ### 好吗
 愿你的坚持努力将得到回报，不负汗水艰辛。中秋快乐
 ![moming](/img/in-post/post-mid-autumn/IMG_20171004_095200.jpg)
+>明天，继续启程。
