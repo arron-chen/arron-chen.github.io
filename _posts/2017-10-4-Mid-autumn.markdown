@@ -11,6 +11,7 @@ tags:
 ---
 # hello ,Mid-autumn
 >还好吗，中秋我的朋友
+
 ## 不一样的中秋
 ![hello](/img/in-post/post-mid-autumn/img-50e25001583dec5c8c71afb313f6b203.jpg)
 
@@ -22,5 +23,5 @@ tags:
 ![moming](/img/in-post/post-mid-autumn/mmexport1507106165252.jpg)
 ### 好吗
 愿你的坚持努力将得到回报，不负汗水艰辛。中秋快乐
-![moming](/img/in-post/post-mid-autumn/IMG_20171004_095200.jpg)
+![moming](/img/in-post/post-mid-autumn/IMG_20171004_095200.JPG)
 >明天，继续启程。
