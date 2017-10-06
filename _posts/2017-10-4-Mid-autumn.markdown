@@ -1,7 +1,6 @@
 ---
 layout:     post
-title:      "hello ,Mid-autumn"
-subtitle:   "hi, moon"
+title:      "Hello ,Mid-autumn"
 date:       2017-10-4
 author:     "arron"
 header-img: "img/post-bg-unix-linux.jpg"
@@ -9,7 +8,7 @@ tags:
     - life
     
 ---
-# hello ,Mid-autumn
+
 >还好吗，中秋我的朋友
 
 ## 不一样的中秋
@@ -21,7 +20,7 @@ tags:
 然后，喜欢上了他的歌，觉得好像能够理解些东西了，莫名感叹。
 
 ![moming](/img/in-post/post-mid-autumn/mmexport1507106165252.jpg)
-### 好吗
+### 过的好吗
 愿你的坚持努力将得到回报，不负汗水艰辛。中秋快乐
 ![moming](/img/in-post/post-mid-autumn/IMG_20171004_095200.JPG)
 >明天，继续启程。
