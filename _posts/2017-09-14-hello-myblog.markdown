@@ -7,7 +7,7 @@ author:     "arron"
 header-img: "img/post-bg-js-version.jpg"
 tags:
     - blog
-    - 生活
+    - life
 ---
 > "Hello world,hello coder"
 
