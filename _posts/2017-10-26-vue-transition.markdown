@@ -3,7 +3,7 @@ layout: post
 title: "Vue内置组件--transition 踩坑记"
 data: 2017-10-26
 author: "arron"
-header-img: "img/vue.png"
+header-img: "img/vue1.png"
 tags: 
     -note
 ---
