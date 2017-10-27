@@ -12,11 +12,11 @@ tags:
 > 当网络请求比较慢的时候,提前给这张图片添加一个像素比较低的占位图片，不至于堆叠在一块，或显示大片空白，达到更好的用户体验。
 vue-lazyload 插件 [传送门]('https://www.npmjs.com/package/vue-lazyload')
 ### Installation 安装方式
-npm
+> npm
 ``` node
 $ npm i vue-lazyload -D
 ```
-CDN
+> CDN
 ``` js
 <script src="https://unpkg.com/vue-lazyload/vue-lazyload.js"></script>
 <script>
@@ -26,7 +26,7 @@ CDN
 ```
 ### 简单实例
 > 简单接入示例
-html代码：
+html代码
 ``` html 
 <div id="app">
     <li v-for="img in imgList">
