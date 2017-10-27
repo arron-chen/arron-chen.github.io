@@ -9,13 +9,9 @@ tags:
 ---
 
 ### 前言
-
 > 当网络请求比较慢的时候,提前给这张图片添加一个像素比较低的占位图片，不至于堆叠在一块，或显示大片空白，达到更好的用户体验。
-
 vue-lazyload 插件 [传送门]('https://www.npmjs.com/package/vue-lazyload')
-
 ### Installation 安装方式
-
 npm
 ``` node
 $ npm i vue-lazyload -D
@@ -29,7 +25,6 @@ CDN
 </script>
 ```
 ### 简单实例
-
 > 简单接入示例
 html代码：
 ``` html 
@@ -56,17 +51,13 @@ js代码：
 </script>
 ```
 ### 原理简述
-
 1. vue-lazyload是通过指令的方式实现的，定义的指令是v-lazy指令
 2. 指令被bind时会创建一个listener，并将其添加到listener queue里面， 并且搜索target dom节点，为其注册dom事件(如scroll事件)
 3. 上面的dom事件回调中，会遍历 listener queue里的listener，判断此listener绑定的dom是否处于页面中perload的位置，如果处于则加载异步加载当前图片的资源
 4. 同时listener会在当前图片加载的过程的loading，loaded，error三种状态触发当前dom渲染的函数，分别渲染三种状态下dom的内容
 
-
 ### 用法
-
 main.js 在入口文件
-
 ``` js
 import Vue from 'vue'
 import App from './App.vue'
@@ -96,15 +87,13 @@ new Vue({
 </div>
 ```
 把之前项目中img 标签里面的 :src 属性 改成 v-lazy
-
 ``` html
 <div class="pic">
     <a href="#"><img v-lazy="'/static/img/' + item.productImage" alt=""></a>
 </div>
 ```
 
-另外可以定制所有加载中和加载失败加载成功的样式
-
+另外可以定制所有加载中和加载失败加载成功的样
 ``` css
 <style>
  img[lazy=loading] {
@@ -131,9 +120,7 @@ new Vue({
 </style>
 ```
 
-
 ### 参数选项说明
-
 | key | description | default | options |
 | --- | :--- | :---: | ---: |
 | `preLoad` | proportion of pre-loading height | `1.3` | `Number` |
@@ -150,14 +137,9 @@ new Vue({
 | `observerOptions` | 	IntersectionObserver options | `{ rootMargin: '0px', threshold: 0.1 }` | IntersectionObserver |
 
 
-
-
-
 ### 事件监听
-
 可以通过传递数组来配置想要使用vue - lazyload的事件
 监听器的名字。
-
 ``` js
 Vue.use(VueLazyload, {
   preLoad: 1.3,
@@ -168,6 +150,11 @@ Vue.use(VueLazyload, {
   listenEvents: [ 'scroll' ]
 })
 ```
+
+---
+> 每日一记
+
+by the way ,胖真的是原罪。 好好锻炼身体，工伤致残就不好了！
 
 
 
