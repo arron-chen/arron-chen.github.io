@@ -5,7 +5,7 @@ data: 2017-10-26
 author: "arron"
 header-img: "img/vue.jpg"
 tags: 
-    -note
+    - note
 ---
 # **vue**单元素/组件过渡实现
 
