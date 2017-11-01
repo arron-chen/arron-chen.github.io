@@ -25,32 +25,32 @@ $(function(){
         return false
     })
 })
-
 ```
-3. 第三种：通过jQuery  中的$.ajax() 异步刷新；个人感觉最好用的一种，既不刷新界面，各个js功能也能正常加载实现
-``` js
+3. 第三种：通过jQuery  中的$.ajax() 异步刷新；个人感觉最好用的一种，既不刷新界面，各个js功能也能正常加载实现   
+
+``` html
 <script type="text/javascript">
 // 第二种方法加载页面：jQuery $.ajax
 $(document).ready(function(){
-  ajaxload('user_dashboard.html')
-  function ajaxload(local){
-      htmlobj=$.ajax({url:local,async:false});
-      $(".contentRight").html(htmlobj.responseText);
-  }
-  $("#sidebar").find('li:eq(0)').click(function(){
-      ajaxload('user_dashboard.html')
-   return false;
-  });
-  
-  $("#sidebar").find('li:eq(1)').click(function(){
-    ajaxload('user_profile.html')
-  return false;
-  });
-  
+ajaxload('user_dashboard.html')
+function ajaxload(local){
+    htmlobj=$.ajax({url:local,async:false});
+    $(".contentRight").html(htmlobj.responseText);
+}
+$("#sidebar").find('li:eq(0)').click(function(){
+    ajaxload('user_dashboard.html')
+return false;
 });
 
+$("#sidebar").find('li:eq(1)').click(function(){
+    ajaxload('user_profile.html')
+return false;
+});
+
+});
 </script>
-```
+ ```
+ 
 4. 第四种：通过js中的Ajax进行异步刷新，但是有一个问题，被加载过来的界面中的js不能使用，只能把html界面加载过来，但是js加载不过来。但是可以动态创建script标签在需要的地方把js加载过来即可
 ``` js
 window.onload=function(){
@@ -89,9 +89,9 @@ var oScript = document.createElement('script');
       xhr.open('get',url,true);
       xhr.send();
   }
-    
-    
+      
 }
+
 ```
 
 > 遇到的iframe相关的问题有很多，先整理这些
