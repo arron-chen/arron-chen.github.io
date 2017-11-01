@@ -1,0 +1,97 @@
+---
+layout: post
+title: "iframe相关问题"
+data: 2017-11-01
+author: 'arron'
+header-img: "img/post-bg-js-version.jpg"
+tags: 
+ - note
+
+---
+### 加载HTML页面页面到另一个界面中 ###
+
+1. 第一种：iframe 但是，对于个人经验来说，iframe最好不要用，不仅自适应不太好，而且对于seo优化特别不好
+2. 第二种：通过jQuery load 事件加载页面。比较简单，但是会刷新界面。不过个人感觉影响不大，可以return false   组织界面刷新
+``` js
+$(function(){
+    var aHomePageLi = $('.sidebar-nav').find('ul').find('li');
+    $('.contentRight').load('user_dashboard.html');   //.把user_dashboard.html界面加载到contentRight的div中
+    aHomePageLi.eq(0).click(function(){
+        $('.contentRight').load('user_dashboard.html');
+        return false
+    })
+    aHomePageLi.eq(1).click(function(){
+        $('.contentRight').load('user_profile.html');
+        return false
+    })
+})
+
+```
+3. 第三种：通过jQuery  中的$.ajax() 异步刷新；个人感觉最好用的一种，既不刷新界面，各个js功能也能正常加载实现
+``` js
+<script type="text/javascript">
+// 第二种方法加载页面：jQuery $.ajax
+$(document).ready(function(){
+  ajaxload('user_dashboard.html')
+  function ajaxload(local){
+      htmlobj=$.ajax({url:local,async:false});
+      $(".contentRight").html(htmlobj.responseText);
+  }
+  $("#sidebar").find('li:eq(0)').click(function(){
+      ajaxload('user_dashboard.html')
+   return false;
+  });
+  
+  $("#sidebar").find('li:eq(1)').click(function(){
+    ajaxload('user_profile.html')
+  return false;
+  });
+  
+});
+
+</script>
+```
+4. 第四种：通过js中的Ajax进行异步刷新，但是有一个问题，被加载过来的界面中的js不能使用，只能把html界面加载过来，但是js加载不过来。但是可以动态创建script标签在需要的地方把js加载过来即可
+``` js
+window.onload=function(){
+    var oContentRight=document.getElementById('contentRight');
+    var osidebar = document.getElementById('sidebar');
+    var ali = osidebar.getElementsByTagName('li');
+    
+    ajaxLoad(oContentRight,'user_dashboard.html');
+    ali[0].onclick = function(){
+        ajaxLoad(oContentRight,'user_dashboard.html');
+        return false;
+    };
+    ali[1].onclick = function(){
+        ajaxLoad(oContentRight,'user_profile.html');
+var oScript = document.createElement('script');
+        oScript.src = 'javascript/user.js';
+        document.body.appendChild(oScript);
+
+        return false;
+    };
+      function ajaxLoad(shopId,url){
+      var xhr='';
+      if (window.XMLHttpRequest){
+        xhr=new XMLHttpRequest();
+        }else{
+          xhr=new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        
+        xhr.onreadystatechange=function(){
+        if(xhr.readyState==4){
+            if(xhr.status==200){
+              shopId.innerHTML = xhr.responseText;
+            }
+          }
+        }
+      xhr.open('get',url,true);
+      xhr.send();
+  }
+    
+    
+}
+```
+
+> 遇到的iframe相关的问题有很多，先整理这些
