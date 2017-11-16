@@ -1,0 +1,45 @@
+---
+layout: post
+title: "JQuery双击触发单击事件解决"
+date: 2017-11-17
+author: 'arron'
+header-img: "img/post-bg-js-version.jpg"
+tags: 
+ - note
+---
+> 在一些表格控件 如*EasyUI* 或者自定义点击事件中，经常会遇到单双击事件冲突，双击触发单击事件的问题。
+
+##### 解决思路:
+通过设置延时*setTimeout*判断是否触发单双击事件
+
+*在单击事件中添加一个延时，若在延时所在的时长内没有做其他操作，则执行单击事件，若在延时的时长内，再次点击控件，则取消延时程序*
+
+##### 示例：
+- step1 定义全局变量
+``` js
+var TimeFn = null;
+```
+- step2 单双击设置延时
+> 单击事件：
+``` js
+onClickRow: function (index, row) {
+                    clearTimeout(TimeFn);
+                    //执行延时
+                    TimeFn = setTimeout(function () {
+                     //....Other Operation
+                    }, 300);//延时时长设置                    
+            }
+```
+> 双击事件：
+``` js
+onDblClickRow: function (index, row) {
+                clearTimeout(TimeFn);
+                //....Other Operation
+                }
+
+```
+
+> 这个坑踩了很多次，把它记上我的小本本
+
+
+    
