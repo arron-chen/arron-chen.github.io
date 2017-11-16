@@ -11,7 +11,7 @@ tags:
 ---
 > "Hello world,hello coder"
 
-## 前言
+### 前言
   arron 的 blog 就这样开通了。
 
   [好事多磨，先上点干货吧](#build)
@@ -29,7 +29,7 @@ tags:
 <p id = "build"></p>
 ---
 
-## 正文
+### 正文
 
 接下来说说搭建这个博客的技术细节。  
 
@@ -61,7 +61,7 @@ tags:
 
 另外考虑中文字体的渲染，fork 了 [Type is Beautiful](http://www.typeisbeautiful.com/) 的 `font` CSS，调整了字号，适配了 Win 的渣渲染，中英文混排效果好多了。
 
-## 后记
+### 后记
 
 回顾这个博客的诞生，纯粹是出于程序员不得不在乎的脸面吧。没有属于自己的 blog 就感觉是只野生程序猿没有`ID card`
 
