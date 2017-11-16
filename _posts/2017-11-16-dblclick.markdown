@@ -21,7 +21,7 @@ var TimeFn = null;
 ```
 - step2 单双击设置延时
 > 单击事件：
-``` js
+```  js
 onClickRow: function (index, row) {
                     clearTimeout(TimeFn);
                     //执行延时
@@ -31,12 +31,11 @@ onClickRow: function (index, row) {
             }
 ```
 > 双击事件：
-``` js
+```  js
 onDblClickRow: function (index, row) {
                 clearTimeout(TimeFn);
                 //....Other Operation
                 }
-
 ```
 
 > 这个坑踩了很多次，把它记上我的小本本
